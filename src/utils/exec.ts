@@ -1,14 +1,17 @@
-import { spawn, SpawnOptionsWithoutStdio, ChildProcessWithoutNullStreams} from 'child_process';
+import { spawn, SpawnOptionsWithoutStdio, ChildProcessWithoutNullStreams } from 'node:child_process';
 
 function normalizeCommand(command: string): string {
   // trim and clear \n
-  return command.replace(/\r?\n|\r/g, '').replace(/\s+/g, ' ').trim();
+  return command
+    .replace(/\r?\n|\r/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
 }
 
 export function child_exec(
   command: string,
   optionsOrCallback?: SpawnOptionsWithoutStdio | ((error: Error | null, stdout: string, stderr: string) => void),
-  callback?: (error: Error | null, stdout: string, stderr: string) => void
+  callback?: (error: Error | null, stdout: string, stderr: string) => void,
 ): ChildProcessWithoutNullStreams {
   let options: SpawnOptionsWithoutStdio = {};
 
