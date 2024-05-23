@@ -17,9 +17,12 @@ import { launch } from '../src/os/launch';
     // await context.close();
     // await browser.close();
 
-    const { close, $childProcess } = await launch({
-        execPath: webkit.executablePath(),
+    const { close } = await launch({
+        execPath: chromium.executablePath(),
         logDir: path.resolve(process.cwd(), './tmp'),
+        onClose: () => {
+            console.log('close');
+        },
     });
 
     await new Promise((res) => setTimeout(res, 5_000));
@@ -32,7 +35,7 @@ import { launch } from '../src/os/launch';
     console.log('kill');
 
     // await new Promise((res) => setTimeout(res, 5_000));
-    await close();
+    // await close();
 
     console.log('exit');
 })();

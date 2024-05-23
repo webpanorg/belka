@@ -18,7 +18,7 @@ export interface LauncOptions {
     args?: Array<string>;
     env?: NodeJS.ProcessEnv;
     logDir: string;
-    callback?: (arg: { pid: number; code: number; signal: NodeJS.Signals }) => void | Promise<void>;
+    onClose?: (arg: { pid: number; code: number; signal: NodeJS.Signals }) => void | Promise<void>;
 }
 
 export interface LaunchResult {
@@ -28,7 +28,7 @@ export interface LaunchResult {
 }
 
 export const launch = async (options: LauncOptions): Promise<LaunchResult> => {
-    const { execPath, args, env, logDir, callback } = options;
+    const { execPath, args, env, logDir, onClose } = options;
 
     const logDirExist = await fse.pathExists(logDir);
     if (!logDirExist) {
@@ -62,8 +62,8 @@ export const launch = async (options: LauncOptions): Promise<LaunchResult> => {
     }
 
     childProcess.once('exit', (exitCode, signal) => {
-        if (callback) {
-            callback({
+        if (onClose) {
+            onClose({
                 pid: childProcess.pid,
                 code: exitCode,
                 signal,
