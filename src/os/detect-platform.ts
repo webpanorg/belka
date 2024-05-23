@@ -1,0 +1,48 @@
+/**
+ * @license
+ * Copyright 2023 Google Inc.
+ * SPDX-License-Identifier: Apache-2.0
+ */
+
+import os from 'node:os';
+
+export enum BrowserPlatform {
+    LINUX = 'linux',
+    MAC = 'mac',
+    MAC_ARM = 'mac_arm',
+    WIN32 = 'win32',
+    WIN64 = 'win64',
+}
+
+/**
+ * Windows 11 is identified by the version 10.0.22000 or greater
+ * @internal
+ */
+const isWindows11 = (version: string): boolean => {
+    const parts = version.split('.');
+    if (parts.length > 2) {
+        const major = parseInt(parts[0] as string, 10);
+        const minor = parseInt(parts[1] as string, 10);
+        const patch = parseInt(parts[2] as string, 10);
+        return major > 10 || (major === 10 && minor > 0) || (major === 10 && minor === 0 && patch >= 22000);
+    }
+    return false;
+};
+
+export function detectPlatform(): BrowserPlatform | undefined {
+    const platform = os.platform();
+    switch (platform) {
+        case 'darwin':
+            return os.arch() === 'arm64' ? BrowserPlatform.MAC_ARM : BrowserPlatform.MAC;
+        case 'linux':
+            return BrowserPlatform.LINUX;
+        case 'win32':
+            return os.arch() === 'x64' ||
+                // Windows 11 for ARM supports x64 emulation
+                (os.arch() === 'arm64' && isWindows11(os.release()))
+                ? BrowserPlatform.WIN64
+                : BrowserPlatform.WIN32;
+        default:
+            return undefined;
+    }
+}

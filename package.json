@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "ts-node ./tests/index.ts",
+    "firefox": "ts-node ./example/firefox.ts",
     "start": "ts-node ./src/index.ts",
     "lint": "eslint ./ --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint --fix ./ --ext .js,.jsx,.ts,.tsx"
@@ -11,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
     "@typescript-eslint/eslint-plugin": "^7.9.0",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -21,6 +24,8 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
-
+    "fs-extra": "^11.2.0",
+    "playwright": "^1.44.1",
+    "puppeteer": "^22.9.0"
   }
 }
